@@ -1,9 +1,36 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { IoHome } from 'react-icons/io5'
 import NewChat from './NewChat'
+import { Session } from 'inspector/promises'
+import { useSession } from 'next-auth/react'
+import { useCollection } from "react-firebase-hooks/firestore";
+import { collection, orderBy, query } from 'firebase/firestore'
+import { db } from '@/firebase'
+import { useRouter } from 'next/navigation'
+import ChatRow from './ChatRow'
 
 export const Sidebar = () => {
+  const {data:session} = useSession()
+  const [chats, loading] = useCollection (
+    session && 
+    query
+    (
+      collection(db, "users", session?.user?.email as string, "chats"),
+      orderBy("createdAt", "asc")
+    )
+    
+  )
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!chats) {
+      router.push("/");
+    }
+  }, [chats, router]);
+
+
   return (
     <div className="hidden md:inline-flex flex-col w-full h-screen p-2.5 relative">
     {/* New Chat */}
@@ -15,7 +42,55 @@ export const Sidebar = () => {
           <IoHome />
         </Link>
         <NewChat />
+        <div className="hidden md:inline mt-4 w-full">
+            {/* <ModelSelection /> */}
+        </div>
+        {session?.user?
+        (
+          <>
+          <p className="text-white mt-4 px-2 text-sm font-medium">
+            Chat History
+          </p>
+          <div className="mt-4 overflow-y-scroll h-[80%]">
+            {loading?
+             <div>loader</div> 
+             : 
+              chats?.docs?.length? 
+              (
+                chats?.docs?.map((chat,index) =>
+                  <ChatRow />
+              )
+              )
+              :
+              (
+                <div className="py-8 text-center">
+                <p className="text-sm text-muted-foreground">No chat history</p>
+              </div>
+              )
+              
+            }
+          </div>
+         </>
+        ) 
+        : 
+        
+        (
+          !loading && (
+            <div className="text-sm font-medium text-center mt-10">
+              <p>Please sign in to view history</p>
+              <Link
+                href={"/signin"}
+                className="text-xs hover:text-white duration-300 mt-2 underline decoration-[1px]"
+              >
+                Sign in
+              </Link>
+            </div>
+          )
+        )
+        }
+        
       </div>
     </div>
   )
 }
+

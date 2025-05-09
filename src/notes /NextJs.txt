@@ -1,0 +1,40 @@
+Q1. What's { id }: { id: string }?
+ { id } is destructuring the props — it's the same as:
+ const Input = (props: { id: string }) => {
+  const id = props.id;
+ }
+ So in short, you are saying:"Take a prop object of shape { id: string }, and destructure the id field from it."
+
+Q2. const {data:session} = useSession()???
+You're doing destructuring and renaming at the same time:
+useSession() returns an object like:
+{ data: someSessionData, status: "authenticated" }
+You're grabbing the data property and renaming it to session.
+
+Q3.session?.user ? (session?.user?.email as string) : null
+is using both:
+✅ Optional chaining:
+session?.user and session?.user?.email
+→ Safely checks if session and user exist before accessing properties.
+✅ Ternary operator:
+condition ? valueIfTrue : valueIfFalse
+→ Checks if session?.user is truthy, returns email if yes, else null.
+Q4.In the line `const page = ({ params: { id } }: Props)`, `params` comes from the dynamic route in Next.js.
+If your file is named like this:
+`app/posts/[id]/page.tsx`,
+Next.js automatically passes the URL part (like `/posts/123`) as `params`, so `id = "123"`.
+You're just extracting `id` from `params` using **destructuring**.
+
+Q4.NextRequest, NextResponse -> check documentation for more info 
+request.json() ->  Returns a promise that resolves with the result of parsing the request body as JSON.Read the body.Parse it into a usable JavaScript object
+****NextResponse.json(data) in Next.js (used in API routes or middleware) creates a response with a JSON body. It:
+Takes a JavaScript object (e.g., { name: "Alice" })
+Converts it into JSON
+Wraps it into a response to be sent to the client.
+
+
+
+
+
+
+

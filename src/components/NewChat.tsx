@@ -9,13 +9,13 @@ import { FaPlus } from 'react-icons/fa'
 const NewChat = () => {
   const router = useRouter()
   const {data:session} = useSession()
-  if (!session?.user?.email) {
-    console.error("User is not logged in!");
-    return;
-  }
-  else{
-    console.log(session.user.email)
-  }
+  // if (!session?.user?.email) {
+  //   console.error("User is not logged in!");
+  //   return;
+  // }
+  // else{
+  //   console.log(session.user.email)
+  // }
   
   const createNewChat = async () =>  {
     //create a new chatID in firestore 

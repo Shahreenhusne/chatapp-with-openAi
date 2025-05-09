@@ -4,6 +4,7 @@ import "./globals.css";
 import { Sidebar } from "../components/Sidebar";
 import Header from "../components/Header";
 import { SessionProvider } from "next-auth/react";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,15 @@ export default function RootLayout({
               </div>
           </div> 
         </SessionProvider>     
+        <Toaster
+        position = 'top-center'
+        toastOptions = {{
+          style: {
+            background: '#363636',
+            color: '#fff',
+          }
+        }}
+      />
       </body>
     </html>
   );

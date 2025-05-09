@@ -1,0 +1,48 @@
+
+1.export const { handlers, signIn, signOut, auth } = NextAuth({});
+This line:
+Call the NextAuth() function with your authentication settings (like providers).
+It gives you back some tools (handlers, signIn, signOut, and auth) that you can export and use in your app.
+1.handlers
+handlers is ready-made code from NextAuth.
+It knows how to respond to things like:
+GET /api/auth/session
+POST /api/auth/signin
+POST /api/auth/signout
+GET /api/auth/callback/:provider
+You don’t have to write the logic yourself.
+Instead, you just plug it into your route.ts file.
+2️⃣ signIn
+✅ What is it?
+A function to programmatically sign in a user.
+Client-side only
+✅ Why use it?
+Redirects users to sign in using the configured authentication provider.
+3️⃣ signOut
+✅ What is it?
+A function to programmatically sign out a user.
+Client-side only
+4️⃣ auth
+✅ What is it?
+A function that retrieves the current session (user authentication data).
+Returns a Promise, so it must be used with await.
+Used only in Server Components and Route Handlers.
+✅ Why use it?
+Fetches session details securely without needing API calls.
+
+
+
+
+
+
+
+2.What is SessionProvider? In Layout main file
+SessionProvider comes from the next-auth/react package.
+It allows child components to access session state via the useSession() hook.
+It helps manage:Initial session loading,Session updates,Session expiration
+
+3. What is useSession()? in newChat.tsx
+A React hook that allows you to access the current session data (user info, authentication status, etc.).
+Returns an object with two properties:
+data: The session object or null.
+status: The status of the session ("loading", "authenticated", or "unauthenticated").

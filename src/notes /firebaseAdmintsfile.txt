@@ -1,0 +1,38 @@
+
+import { getApps } from "firebase/app";
+
+- This imports the `getApps` function from the Firebase client SDK.
+- `getApps()` returns a list of initialized Firebase apps on the client.
+- It’s usually used to check if any Firebase apps have already been initialized.
+
+import admin from "firebase-admin"
+
+- This imports the **Firebase Admin SDK**, which allows server-side interaction with Firebase services (like Firestore, Authentication, etc).
+- It's used in backend environments (like Next.js API routes, Node.js servers, etc), not in the browser.
+
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY as string);
+
+- This reads your Firebase service account credentials from an environment variable (`FIREBASE_SERVICE_ACCOUNT_KEY`).
+- It's parsed from a string (usually stored as a JSON string in your `.env` file) into a JS object.
+- This object contains sensitive credentials (like `project_id`, `private_key`, `client_email`, etc).
+
+
+// it mean getApps length is 0 then we will enter the if block 
+if (!getApps.length)
+
+- This checks if there are **no initialized Firebase apps** yet.
+
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount)
+    });
+
+- If there are no apps initialized, we initialize the Firebase Admin SDK.
+- `admin.initializeApp()` bootstraps the Firebase app on the server.
+- `admin.credential.cert(serviceAccount)` creates a credential object using the parsed service account key.
+
+const adminDB = admin.firestore();
+
+- This initializes the Firestore database from the Admin SDK.
+- Now you can use `adminDB` to interact with Firestore (read, write, update documents) securely on the server.
+
+
