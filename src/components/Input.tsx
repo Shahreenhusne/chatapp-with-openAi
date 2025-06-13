@@ -9,6 +9,7 @@ import { TbPaperclip } from 'react-icons/tb'
 import { useRouter } from 'next/navigation';
 
 
+
 const Input = ({id}: {id?: string}) => {
     // console.log(id)
     const [prompt, setPrompt] = useState("")
@@ -17,14 +18,14 @@ const Input = ({id}: {id?: string}) => {
     const userEmail = session?.user?(session?.user?.email as string):"unknown"
     const userName = session?.user?(session?.user?.name as string): "unknown"
     const router = useRouter()
-    const model = "gpt-4-turbo"
+    const model = 'gpt-3.5-turbo-instruct'
 
     //function
     const onSubmit = async(e:FormEvent<HTMLFormElement>) => {
           e.preventDefault()
           if(!prompt) return;
           const input = prompt.trim();
-          const message = 
+          const messages = 
           {
             text: input,
             createdAt: serverTimestamp(),
@@ -46,7 +47,7 @@ const Input = ({id}: {id?: string}) => {
             if (!id)
             {
               const newDoc = await addDoc(collection( db, 'users',userEmail,"chats"),
-              {
+                  {
                     userId: session?.user?.email as string,
                     createdAt: serverTimestamp(),
                   }
@@ -54,15 +55,12 @@ const Input = ({id}: {id?: string}) => {
               chatId = newDoc.id;
               router.push(`/chat/${chatId}`)
             }
-            else
-            {
-               // Add the message to the new or existing chat, which has an id 
-               await addDoc(collection(db,"users",userEmail, "chats", chatId as string,
-                "messages"), message)
-            }
+            
+            // Add the message to the new or existing chat, which has an id 
+            await addDoc(collection(db,"users",userEmail, "chats", chatId as string,"messages"), messages)
             setPrompt("")
             // Toast notification to say loading
-            const notification = toast.loading("Your request is processing");
+            // const notification = toast.loading("ChatGPT is thinking...");
 
            //send request to backend Api 
            await fetch("/api/askchat", {
@@ -80,13 +78,9 @@ const Input = ({id}: {id?: string}) => {
            {
             const data = await res.json()
             if (data?.success) {
-              toast.success(data?.message, {
-                id: notification,
-              });
+              toast.success(data?.message);
             } else {
-              toast.error(data?.message, {
-                id: notification,
-              });
+              toast.error(data?.message);
             }
 
           })

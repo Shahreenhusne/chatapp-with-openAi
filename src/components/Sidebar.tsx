@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import { IoHome } from 'react-icons/io5'
@@ -42,9 +43,10 @@ export const Sidebar = () => {
           <IoHome />
         </Link>
         <NewChat />
-        <div className="hidden md:inline mt-4 w-full">
+      </div>
+       <div className="hidden md:inline mt-4 w-full">
             {/* <ModelSelection /> */}
-        </div>
+       </div>
         {session?.user?
         (
           <>
@@ -53,12 +55,22 @@ export const Sidebar = () => {
           </p>
           <div className="mt-4 overflow-y-scroll h-[80%]">
             {loading?
-             <div>loader</div> 
+              <div className="flex flex-col flex-1 space-y-2 overflow-auto">
+                 {Array.from({length:10}).map( (_,i) => 
+                 (
+                   <div
+                    key={i}
+                    className="w-full h-8 rounded-md shrink-0 animate-pulse bg-zinc-800"
+                  />
+                 )
+              // The (_ )is just a placeholder for the first argument (the array element), which isn't used here,common convention to show "I'm ignoring this value."
+                 )}
+              </div>
              : 
               chats?.docs?.length? 
               (
                 chats?.docs?.map((chat,index) =>
-                  <ChatRow />
+                  <ChatRow  key={index} id={chat?.id}/>
               )
               )
               :
@@ -89,7 +101,7 @@ export const Sidebar = () => {
         )
         }
         
-      </div>
+   
     </div>
   )
 }

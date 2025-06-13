@@ -1,7 +1,7 @@
 import openai from "./chatgpt";
 
 const query = async (prompt: string, id: string, model: string) => {
-  const response = await openai.chat.completions
+  const res = await openai.chat.completions
     .create({
       model, // Use the specified chat model, e.g., "gpt-3.5-turbo"
       messages: [
@@ -20,7 +20,7 @@ const query = async (prompt: string, id: string, model: string) => {
         `ChatGPT was unable to find an answer for that! (Error: ${err?.message})`
     );
 
-  return response;
+  return res;
 };
 
 export default query;

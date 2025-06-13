@@ -54,3 +54,5 @@ If the comments collection doesn’t exist yet, Firestore will automatically cre
 collection(db, "users", email, "chats") → Refers to a subcollection called "chats" under a document whose ID is the user's email inside the "users" collection.
 3. serverTimestamp (NewChat.tsx)
 serverTimestamp() is a Firestore utility that sets a timestamp using Firebase's server clock, not the user's device. This ensures consistency across all users regardless of their local time settings.
+
+4.doc() -> you want to reference a specific nested document, or a document in Firestore.You use it to read from, write to, update, or delete that particular document.
